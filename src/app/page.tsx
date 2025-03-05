@@ -24,7 +24,7 @@ export default function Home() {
         </h1>
         <p className="text-lg text-gray-500">
           Our <span className="font-bold">resume builder</span> helps you
-          design a professional resume, even if you&apos;re not very smart.
+          design a professional resume.
         </p>
         <Button asChild size="lg" className="" variant="premium">
           <Link href="/resumes">Get started</Link>
