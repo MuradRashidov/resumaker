@@ -7,12 +7,19 @@ import { fileReplacer } from "@/lib/utils";
 import { ResumeValues } from "@/lib/validation";
 import { set } from "date-fns";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 export default function useAutoSaveResume(resumeData: ResumeValues) {  
+  
   const searchParams = useSearchParams();
-  const debouncedResumeData = useDebounce(resumeData, 1500);
-  const [resumeId,setResumeId] = useState(resumeData.id);
+  console.log("resumeIdjjefdsfdfsdf",searchParams.get("resumeId")); 
+  
+const debouncedResumeData = useDebounce(resumeData, 1500);
+// const initialResumeId = searchParams.get("resumeId") || resumeData.id;
+// const [resumeId, setResumeId] = useState(initialResumeId);
+const initialResumeId = resumeData.id || searchParams.get("resumeId") || "";
+const [resumeId, setResumeId] = useState<string | undefined>(initialResumeId);
+
   const {toast} = useToast();
 
   const [lastSavedData, setLastSavedData] = useState(
@@ -33,15 +40,17 @@ export default function useAutoSaveResume(resumeData: ResumeValues) {
 
         const updatedData = await saveResume({
           ...newData,
-          id: resumeId,
+          id: resumeId!,
           ...(JSON.stringify(lastSavedData.photo,fileReplacer) === JSON.stringify(newData.photo,fileReplacer) && {photo: undefined}),
         });
-        setResumeId(updatedData?.id);
-        setLastSavedData(newData);
-
+        
+        setResumeId(updatedData?.id!);
+        setLastSavedData(newData);        
         if(searchParams.get("resumeId") !== updatedData?.id){
           const newSearchParams = new URLSearchParams(searchParams);
-          newSearchParams.set("resumeId", updatedData?.id as string);
+          newSearchParams.set("resumeId", updatedData?.id!);
+          console.log("resumeId3: ", updatedData?.id);
+          
           window.history.replaceState(null, "", `?${newSearchParams.toString()}`);
         }
         
@@ -77,7 +86,9 @@ export default function useAutoSaveResume(resumeData: ResumeValues) {
     debouncedResumeData,
     isSaving,
     lastSavedData,
-    resumeId,
+    initialResumeId,
+    searchParams,
+    toast,
     error
   ]);
 

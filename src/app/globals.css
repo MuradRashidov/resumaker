@@ -6,7 +6,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -63,8 +62,27 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
-
-
+@media print {
+  #resumePreviewContent {
+    zoom: 1 !important;
+    padding: 0;
+  }
+  img {
+    display: block !important;
+    visibility: visible !important;
+  }
+  span[data-testid="next-image"] {
+    display: block !important;
+    visibility: visible !important;
+  }
+}
+#resumePreviewContent {
+  font-family: Inter
+}
+@page {
+  size: A4;
+  margin: 0.6cm;
+}
 @layer base {
   * {
     @apply border-border;

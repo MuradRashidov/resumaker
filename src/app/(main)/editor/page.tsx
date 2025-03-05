@@ -20,7 +20,8 @@ export default async function ({ searchParams }: ResumeProps) {
             id: resumeId,
             userId
         },
-        include: resumeDataInclude
+        include: resumeDataInclude,
+        
     }): null;
     return <ResumeEditor resumeToEdit={editedResume} />
 }

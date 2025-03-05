@@ -21,7 +21,7 @@ const WorkExperienceForm = ({ resumeData, setResumeData }: EditorFormProps) => {
     const form = useForm<WorkExperienceValues>({
         resolver: zodResolver(workExperienceSchema),
         defaultValues: {
-            workExperiences: resumeData.workExperiences || []
+            workExperiences: resumeData.workExperiences ?? []
         }
     });
 

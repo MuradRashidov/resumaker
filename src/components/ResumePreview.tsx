@@ -10,10 +10,11 @@ import { BorderStyles } from '@/app/(main)/editor/BorderStyleButton';
 
 interface ResumePreviewProps {
     resumeData: ResumeValues,
-    className: string
+    contentRef?: React.Ref<HTMLDivElement>,
+    className?: string
 }
 
-const ResumePreview = ({ resumeData, className }: ResumePreviewProps) => {
+const ResumePreview = ({ resumeData, className, contentRef }: ResumePreviewProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const { width: w } = useDimensions(containerRef);
     let width = w
@@ -29,6 +30,7 @@ const ResumePreview = ({ resumeData, className }: ResumePreviewProps) => {
                     style={{
                         zoom: (1 / 794) * width,
                     }}
+                    ref={contentRef}
                     id="resumePreviewContent"
                 >
                     <PersonalInfoHeader resumeData={resumeData} />
@@ -65,13 +67,15 @@ function PersonalInfoHeader({ resumeData }: ResumeSectionProps) {
         <div className='flex items-center space-x-6'>
             {
                 photoSrc &&
-                <Image
-                    style={{ borderRadius: borderStyle === BorderStyles.CIRCLE ? "9999px" : borderStyle === BorderStyles.SQUARE ? "0px" : "10px" }}
+                <img
                     src={photoSrc}
-                    alt="sdad"
+                    alt="Profil Fotoğrafı"
                     width={100}
                     height={100}
                     className="aspect-square object-cover"
+                    style={{
+                        borderRadius: borderStyle === BorderStyles.CIRCLE ? "9999px" : borderStyle === BorderStyles.SQUARE ? "0px" : "10px"
+                    }}
                 />
             }
             <div className="space-y-2.5">
@@ -190,10 +194,11 @@ function Educations({ resumeData }: EducationsProps) {
                 className="border-2"
                 style={{ borderColor: colorHex }}
             />
-            <div className="break-inside-avoid space-y-3">
+            <div
+                className="break-inside-avoid space-y-3">
                 <h2
                     className="font-semibold text-2xl"
-                    style={{ borderColor: colorHex }}
+                    style={{ color: colorHex }}
                 >Educations</h2>
                 <div>
                     {
@@ -205,7 +210,7 @@ function Educations({ resumeData }: EducationsProps) {
                                 >
                                     <span>{edu.degree}</span>
                                     {edu.startDate && (
-                                        <span>
+                                        <span style={{ color: colorHex }}>
                                             {formatDate(edu.startDate, "MM/yyyy")}
                                             {edu.endDate ? "- " + formatDate(edu.endDate, "MM/yyyy") : ""}
                                         </span>

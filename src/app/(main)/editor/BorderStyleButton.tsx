@@ -2,6 +2,9 @@ import { Button } from '@/components/ui/button';
 import { on } from 'events';
 import { Circle, Square, Squircle, SquircleIcon } from 'lucide-react';
 import React from 'react';
+import { useSubscriptionLevel } from '../SubscriptionLevelProvider';
+import usePremiumModal from '@/components/premium/usePremiumModal';
+import { canUseCustomizations } from '@/lib/permissions';
 
 interface BorderStyleButtonProps {
     borderStyle: string | undefined;
@@ -18,8 +21,13 @@ export const BorderStyleButton = ({
     borderStyle,
     onChange
 }: BorderStyleButtonProps) => {
-
+    const subscriptionLevel = useSubscriptionLevel();
+    const premiumModal = usePremiumModal();
     function handleClick(event: React.MouseEvent<HTMLButtonElement | MouseEvent>): void {
+        if(!canUseCustomizations(subscriptionLevel)) {
+            premiumModal.setOpen(true);
+            return;
+        }
        const currentIndex = borderStyle? borderStyleList.indexOf(borderStyle): 0;
        const nextIndex = (currentIndex + 1) % borderStyleList.length;
        onChange(borderStyleList[nextIndex]);

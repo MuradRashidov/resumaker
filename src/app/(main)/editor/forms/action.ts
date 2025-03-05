@@ -1,9 +1,21 @@
 "use server";
 
 import openai from "@/lib/openai";
+import { canUseAITools } from "@/lib/permissions";
+import { getUserSubscriptionLevel } from "@/lib/subscription";
 import { GenerateSummaryInput, generateSummarySchema } from "@/lib/validation";
+import { auth } from "@clerk/nextjs/server";
 
 export const generateSummary = async (input: GenerateSummaryInput) => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+  const subscriptionLevel = await getUserSubscriptionLevel(userId);
+  if(!canUseAITools(subscriptionLevel)) {
+    throw new Error("Upgrade your subscription to use this feature");
+
+  }
   const { educations, workExperiences, jobTitle, skills } =
     generateSummarySchema.parse(input);
   const systemMessage = `
