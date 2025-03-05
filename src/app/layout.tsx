@@ -12,8 +12,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s Resumaker",
-    absolute: "Resumaker"
+    template: "%s Resumaking",
+    absolute: "Resumaking"
   },
   description: "AI Resmue maker is easyest way to creating professional resume",
 };
